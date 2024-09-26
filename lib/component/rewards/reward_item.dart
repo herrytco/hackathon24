@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/services/activated_service.dart';
 
 class RewardItem extends StatelessWidget {
@@ -18,6 +19,9 @@ class RewardItem extends StatelessWidget {
   final String imgUrl;
   final int kelaxCost;
 
+  final double cardSize = 160;
+  final double imageSize = 100;
+
   bool isActivated() {
     return GetIt.I.get<ActivatedService>().isActivated(id);
   }
@@ -27,12 +31,16 @@ class RewardItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(16),
       child: Card(
+        margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
         elevation: 20.0,
         child: InkWell(
           onTap: () => reduceKelaxBalance(kelaxCost, id),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            height: 200,
+          child: SizedBox(
+            height: cardSize,
             width: double.infinity,
             child: Stack(
               children: [
@@ -40,10 +48,9 @@ class RewardItem extends StatelessWidget {
                   return Positioned.fill(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
-                          height: 100,
+                          height: imageSize,
                           width: double.infinity,
                           child: FittedBox(
                             fit: BoxFit.cover,
@@ -51,23 +58,33 @@ class RewardItem extends StatelessWidget {
                             child: Image.asset(imgUrl),
                           ),
                         ),
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            height: 0.6,
+                        Container(
+                          padding: const EdgeInsets.only(left: 8),
+                          height: cardSize - imageSize,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            title,
+                            style: const TextStyle(fontSize: 18),
                           ),
-                        ),
-                        Text(
-                          isActivated()
-                              ? "Aktiviert"
-                              : "Kosten: ${kelaxCost}k's",
-                          style: const TextStyle(height: 0.3),
                         ),
                       ],
                     ),
                   );
                 }),
+                Align(
+                  alignment: const Alignment(
+                    0.9,
+                    0.3,
+                  ),
+                  child: FloatingActionButton(
+                    onPressed: null,
+                    foregroundColor: Colors.white,
+                    backgroundColor: kelagGreen,
+                    child: isActivated()
+                        ? const Icon(Icons.check)
+                        : Text("${kelaxCost}k's"),
+                  ),
+                )
               ],
             ),
           ),
