@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hackathon24/component/drawer_item.dart';
+import 'package:hackathon24/component/welcome/balance_card.dart';
+import 'package:hackathon24/component/welcome/drawer.dart';
 import 'package:hackathon24/constants/theme_data.dart';
+import 'package:hackathon24/services/balance_service.dart';
+
+class _WelcomeData {
+  int balance;
+
+  _WelcomeData(this.balance);
+}
+
+Future<_WelcomeData> _loadData() async {
+  int balance = GetIt.I.get<BalanceService>().balance;
+
+  return _WelcomeData(balance);
+}
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -43,31 +58,18 @@ class WelcomePage extends StatelessWidget {
           ),
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: const [
-            DrawerItem(
-              label: "Home",
-              icon: Icons.home,
-              isSelected: true,
-            ),
-            DrawerItem(
-              label: "Letzte Ladevorgänge",
-              icon: Icons.history,
-              isSelected: false,
-            ),
-            DrawerItem(
-              label: "Ladestationen",
-              icon: Icons.battery_4_bar_rounded,
-              isSelected: false,
-            ),
-            DrawerItem(
-              label: "Punktestand",
-              icon: Icons.attach_money_sharp,
-              isSelected: false,
-            ),
-          ],
-        ),
+      drawer: const WelcomeDrawer(),
+      body: FutureBuilder<_WelcomeData>(
+        future: _loadData(),
+        builder: (context, snapshot) {
+          var data = snapshot.data;
+
+          return Column(
+            children: [
+              BalanceCard(balance: data?.balance),
+            ],
+          );
+        },
       ),
     );
   }
