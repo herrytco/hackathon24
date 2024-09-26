@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hackathon24/constants/theme_data.dart';
+import 'package:hackathon24/pages/reservation.dart';
 import 'package:hackathon24/pages/welcome.dart';
 import 'package:hackathon24/services/activated_service.dart';
 import 'package:hackathon24/services/backend_service.dart';
 import 'package:hackathon24/services/balance_service.dart';
+import 'package:hackathon24/services/chargepoint_service.dart';
 
 extension ColorsExt on Color {
   MaterialColor toMaterialColor() {
@@ -33,6 +35,7 @@ void main() {
   GetIt.I.registerSingleton<BackendService>(BackendService());
   GetIt.I.registerSingleton<BalanceService>(BalanceService());
   GetIt.I.registerSingleton<ActivatedService>(ActivatedService());
+  GetIt.I.registerSingleton<ChargePointService>(ChargePointService());
   runApp(const MyApp());
 }
 
@@ -49,7 +52,11 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const WelcomePage(),
+      routes: {
+        "/": (_) => const WelcomePage(),
+        "/reservations": (_) => const ReservationPage(),
+      },
+      initialRoute: "/reservations",
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hackathon24/services/activated_service.dart';
 import 'package:hackathon24/services/balance_service.dart';
+import 'package:hackathon24/model/app_state.dart';
 import 'package:hackathon24/component/welcome/balance_card.dart';
 import 'package:hackathon24/component/rewards/reward_item.dart';
 
@@ -48,14 +49,14 @@ class _RewardsPageState extends State<RewardsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Rewards')),
-      body: FutureBuilder<_RewardData>(
-        future: _loadData(),
+      body: FutureBuilder<AppState>(
+        future: loadAppState(),
         builder: (context, snapshot) {
           var data = snapshot.data;
 
           return Column(
             children: [
-              BalanceCard(balance: data?.balance),
+              BalanceCard(balance: data),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(

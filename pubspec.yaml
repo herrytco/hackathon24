@@ -27,4 +27,5 @@ flutter:
     - assets/logo.png
     - assets/logo_invers.jpg
     - assets/kelag_ladestation.jpg
+    - assets/ladestationen.json
 
