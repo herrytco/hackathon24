@@ -2,6 +2,7 @@ import 'package:animated_digit/animated_digit.dart';
 import 'package:floating_bubbles/floating_bubbles.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hackathon24/constants/labels.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 
 class BalanceCard extends StatelessWidget {
@@ -12,10 +13,14 @@ class BalanceCard extends StatelessWidget {
 
   final int? balance;
 
+  double get euro {
+    return balance == null ? 0 : balance! / 102.0;
+  }
+
   double get co2 {
     if (balance == null) return 0;
 
-    return balance! / 1000;
+    return balance! / 777;
   }
 
   @override
@@ -50,7 +55,7 @@ class BalanceCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        "eCoins",
+                        "$coinName Konto",
                         style: Theme.of(context)
                             .textTheme
                             .headlineSmall!
@@ -68,7 +73,7 @@ class BalanceCard extends StatelessWidget {
                           ),
                           const Gap(4),
                           Text(
-                            "e's",
+                            coinNameShort,
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium!
@@ -88,7 +93,7 @@ class BalanceCard extends StatelessWidget {
                             ),
                             TextSpan(
                               text:
-                                  "$balance eCoins / ${co2!.toStringAsFixed(2)}g CO₂",
+                                  "${euro.toStringAsFixed(2)} € / ${co2.toStringAsFixed(2)}g CO₂",
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),

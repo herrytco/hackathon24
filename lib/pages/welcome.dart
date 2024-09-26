@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hackathon24/component/welcome/balance_card.dart';
 import 'package:hackathon24/component/welcome/drawer.dart';
 import 'package:hackathon24/constants/theme_data.dart';
@@ -28,6 +31,9 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+
   Future<void> _onCharge() async {
     await GetIt.I.get<BalanceService>().addBalance(Random().nextInt(1000));
 
@@ -94,6 +100,37 @@ class _WelcomePageState extends State<WelcomePage> {
                     icon: const Icon(Icons.history),
                   ),
                 ],
+              ),
+              const Gap(16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32),
+                child: Divider(),
+              ),
+              const Gap(16),
+              Expanded(
+                child: GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: const CameraPosition(
+                    zoom: 15,
+                    target: LatLng(
+                      46.6106852,
+                      13.8097518,
+                    ),
+                  ),
+                  markers: {
+                    const Marker(
+                      markerId: MarkerId("myPosition"),
+                      position: LatLng(
+                        46.6106852,
+                        13.8097518,
+                      ),
+                    ),
+                  },
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                  minMaxZoomPreference: const MinMaxZoomPreference(10, 20),
+                ),
               ),
             ],
           );
