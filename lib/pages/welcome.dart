@@ -28,6 +28,7 @@ class _WelcomePageState extends State<WelcomePage> {
       Completer<GoogleMapController>();
 
   int selectedDrawer = 0;
+  bool dailyGoalReached = false;
 
   void selectDrawer(int selected, BuildContext context) {
     setState(() {
@@ -51,8 +52,12 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Future<void> _onCharge() async {
     await GetIt.I.get<BalanceService>().addBalance(Random().nextInt(1000));
-
-    setState(() {});
+    if (!dailyGoalReached) {
+      await GetIt.I.get<BalanceService>().increaseStreak();
+    }
+    setState(() {
+      dailyGoalReached = true;
+    });
   }
 
   void _onReservation(ChargePoint? chargePoint) {

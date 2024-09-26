@@ -5,6 +5,7 @@ import 'package:hackathon24/services/chargepoint_service.dart';
 
 class AppState {
   final int balance;
+  final int streak;
   final List<ChargePoint> chargePoints;
 
   double get euro {
@@ -15,12 +16,13 @@ class AppState {
     return balance / 777;
   }
 
-  AppState(this.balance, this.chargePoints);
+  AppState(this.balance, this.chargePoints, this.streak);
 }
 
 Future<AppState> loadAppState() async {
   return AppState(
     GetIt.I.get<BalanceService>().balance,
     await GetIt.I.get<ChargePointService>().loadChargePoints(),
+    GetIt.I.get<BalanceService>().streak,
   );
 }

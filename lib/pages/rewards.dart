@@ -6,18 +6,6 @@ import 'package:hackathon24/model/app_state.dart';
 import 'package:hackathon24/component/welcome/balance_card.dart';
 import 'package:hackathon24/component/rewards/reward_item.dart';
 
-class _RewardData {
-  int balance;
-
-  _RewardData(this.balance);
-}
-
-Future<_RewardData> _loadData() async {
-  int balance = GetIt.I.get<BalanceService>().balance;
-
-  return _RewardData(balance);
-}
-
 class RewardsPage extends StatefulWidget {
   const RewardsPage({super.key});
 
