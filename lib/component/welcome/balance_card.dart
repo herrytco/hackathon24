@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hackathon24/constants/labels.dart';
 import 'package:hackathon24/constants/theme_data.dart';
+import 'package:hackathon24/model/app_state.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({
@@ -11,17 +12,7 @@ class BalanceCard extends StatelessWidget {
     required this.balance,
   });
 
-  final int? balance;
-
-  double get euro {
-    return balance == null ? 0 : balance! / 102.0;
-  }
-
-  double get co2 {
-    if (balance == null) return 0;
-
-    return balance! / 777;
-  }
+  final AppState? balance;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +56,7 @@ class BalanceCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           AnimatedDigitWidget(
-                            value: balance ?? 0,
+                            value: balance?.balance ?? 0,
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .headlineLarge!
@@ -93,7 +84,7 @@ class BalanceCard extends StatelessWidget {
                             ),
                             TextSpan(
                               text:
-                                  "${euro.toStringAsFixed(2)} € / ${co2.toStringAsFixed(2)}g CO₂",
+                                  "${balance?.euro.toStringAsFixed(2)} € / ${balance?.co2.toStringAsFixed(2)}g CO₂",
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),

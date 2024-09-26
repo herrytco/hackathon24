@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         "/": (_) => const WelcomePage(),
         "/reservations": (_) => const ReservationPage(),
       },
-      initialRoute: "/",
+      initialRoute: "/reservations",
     );
   }
 }
