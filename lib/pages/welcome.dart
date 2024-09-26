@@ -93,6 +93,18 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        icon: const Icon(Icons.book, color: Colors.white),
+        label: const Text(
+          "Jetzt Ladestation reservieren",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: kelagGreen,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       drawer: WelcomeDrawer(
         selectedDrawer: selectedDrawer,
         selectDrawer: (value) => selectDrawer(value, context),
