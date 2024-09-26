@@ -5,6 +5,7 @@ import 'package:hackathon24/pages/welcome.dart';
 import 'package:hackathon24/services/activated_service.dart';
 import 'package:hackathon24/services/backend_service.dart';
 import 'package:hackathon24/services/balance_service.dart';
+import 'package:hackathon24/services/booking_service.dart';
 import 'package:hackathon24/services/chargepoint_service.dart';
 import 'package:hackathon24/services/icon_helper.dart';
 
@@ -42,6 +43,7 @@ void main() async {
   var iconHelper = IconHelper();
   await iconHelper.init();
   GetIt.I.registerSingleton<IconHelper>(iconHelper);
+  GetIt.I.registerSingleton<BookingService>(BookingService());
 
   runApp(const MyApp());
 }
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'WattUp!',
       theme: ThemeData(
-        sliderTheme: SliderThemeData(
+        sliderTheme: const SliderThemeData(
           showValueIndicator: ShowValueIndicator.always,
         ),
         colorScheme: ColorScheme.fromSeed(

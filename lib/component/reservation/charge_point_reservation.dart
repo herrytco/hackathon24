@@ -1,11 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_multi_slider/flutter_multi_slider.dart';
 import 'package:gap/gap.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hackathon24/constants/car_constants.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/model/chargepoint.dart';
+import 'package:hackathon24/services/booking_service.dart';
+import 'package:intl/intl.dart';
 
 class ChargePointView extends StatefulWidget {
   const ChargePointView({
@@ -20,27 +22,50 @@ class ChargePointView extends StatefulWidget {
 }
 
 class _ChargePointViewState extends State<ChargePointView> {
-  RangeValues _hourSelection = const RangeValues(5, 20);
+  RangeValues _hourSelection = const RangeValues(5, 10);
 
   String _timeToLabel(double time, int startingHour) {
-    var roundedTime = (time * 2).round() / 2;
+    var now = DateTime.now();
+    var start = DateTime(now.year, now.month, now.day, startingHour);
+    var timestamp = DateTime.fromMillisecondsSinceEpoch(
+        (start.millisecondsSinceEpoch + time * (60 * 60 * 1000)).toInt());
 
-    int hour = (startingHour + roundedTime * 0.5).toInt();
-    if (hour >= 24) hour -= 24;
-    if (roundedTime % 2 == 1) return "$hour:30";
-    return "$hour:00";
+    NumberFormat formatter = NumberFormat("00");
+
+    return "${formatter.format(timestamp.hour)}:${formatter.format(timestamp.minute)}";
   }
 
+  double get startSelection => (_hourSelection.start * 2).round() / 2;
+  double get endSelection => (_hourSelection.end * 2).round() / 2;
+
   RangeLabels get rangeLabels => RangeLabels(
-        _timeToLabel(_hourSelection.start, 18),
-        _timeToLabel(_hourSelection.end, 18),
+        _timeToLabel(startSelection, 18),
+        _timeToLabel(endSelection, 18),
       );
 
-  double get selectedDurationInHours =>
-      (((_hourSelection.end - _hourSelection.start) / 2) * 2).round() / 2;
+  double get selectedDurationInHours => endSelection - startSelection;
 
   double get expectedPower => min(batteryCapactiy * batteryPercentage,
       selectedDurationInHours * widget.chargePoint.maxKw);
+
+  void _onBooking(BuildContext context) async {
+    DateTime now = DateTime.now();
+    DateTime start = DateTime(now.year, now.month, now.day, 18); // today 18:00
+    start = DateTime.fromMillisecondsSinceEpoch(
+        (start.millisecondsSinceEpoch + (startSelection * 60 * 60 * 1000))
+            .toInt());
+
+    DateTime end = DateTime.fromMillisecondsSinceEpoch(
+      (start.millisecondsSinceEpoch +
+              (selectedDurationInHours * (60 * 60 * 1000)))
+          .toInt(),
+    );
+    await GetIt.I
+        .get<BookingService>()
+        .startLoading(widget.chargePoint, start, end);
+
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +96,7 @@ class _ChargePointViewState extends State<ChargePointView> {
                 child: RangeSlider(
                   values: _hourSelection,
                   min: 0,
-                  max: 28,
+                  max: 14,
                   onChanged: (value) {
                     setState(() {
                       _hourSelection = value;
@@ -116,7 +141,7 @@ class _ChargePointViewState extends State<ChargePointView> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => _onBooking(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.black,
@@ -124,7 +149,7 @@ class _ChargePointViewState extends State<ChargePointView> {
                 child: const Text("Buchen"),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
