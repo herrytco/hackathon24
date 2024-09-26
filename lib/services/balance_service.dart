@@ -4,7 +4,7 @@ import 'package:hackathon24/services/backend_service.dart';
 class BalanceService {
   int _balance = 0;
   int get balance => _balance;
-  int _streak = 3;
+  int _streak = 4;
   int get streak => _streak;
 
   final BackendService _backendService = GetIt.I.get<BackendService>();
