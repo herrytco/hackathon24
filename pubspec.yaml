@@ -12,6 +12,9 @@ dependencies:
   google_fonts: ^6.2.1
   get_it: ^8.0.0
   gap: ^3.0.1
+  floating_bubbles: ^2.6.2
+  animated_digit: ^3.2.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
