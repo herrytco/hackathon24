@@ -44,7 +44,14 @@ class _WelcomePageState extends State<WelcomePage> {
       if (selected == 3) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const RewardsPage()),
+          MaterialPageRoute(
+            builder: (context) => PopScope(
+              onPopInvokedWithResult: (didpop, dynamic) {
+                setState(() {});
+              },
+              child: const RewardsPage(),
+            ),
+          ),
         );
       }
     });
