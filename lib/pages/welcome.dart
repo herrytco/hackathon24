@@ -9,7 +9,6 @@ import 'package:hackathon24/component/charge_point_map.dart';
 import 'package:hackathon24/component/header.dart';
 import 'package:hackathon24/component/welcome/balance_card.dart';
 import 'package:hackathon24/component/welcome/drawer.dart';
-import 'package:hackathon24/constants/labels.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/model/app_state.dart';
 import 'package:hackathon24/model/chargepoint.dart';
@@ -42,7 +41,7 @@ class _WelcomePageState extends State<WelcomePage> {
               onPopInvokedWithResult: (didpop, dynamic) {
                 setState(() {});
               },
-              child: RewardsPage(),
+              child: const RewardsPage(),
             ),
           ),
         );

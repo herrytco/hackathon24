@@ -11,6 +11,7 @@ class RewardItem extends StatelessWidget {
     required this.imgUrl,
     required this.kelaxCost,
     required this.reduceKelaxBalance,
+    required this.tag,
   });
 
   final Function reduceKelaxBalance;
@@ -18,6 +19,7 @@ class RewardItem extends StatelessWidget {
   final String title;
   final String imgUrl;
   final int kelaxCost;
+  final String tag;
 
   final double cardSize = 160;
   final double imageSize = 100;
@@ -80,6 +82,7 @@ class RewardItem extends StatelessWidget {
                     onPressed: null,
                     foregroundColor: Colors.white,
                     backgroundColor: kelagGreen,
+                    heroTag: tag,
                     child: isActivated()
                         ? const Icon(Icons.check)
                         : Text("${kelaxCost}k's"),

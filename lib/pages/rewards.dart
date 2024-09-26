@@ -54,7 +54,8 @@ class _RewardsPageState extends State<RewardsPage> {
         builder: (context, snapshot) {
           var data = snapshot.data;
 
-          return Column(
+          return SingleChildScrollView(
+              child: Column(
             children: [
               BalanceCard(balance: data),
               Align(
@@ -75,9 +76,26 @@ class _RewardsPageState extends State<RewardsPage> {
                 imgUrl: "assets/kelag_ladestation.jpg",
                 kelaxCost: 1000,
                 reduceKelaxBalance: _reduceBalance,
-              )
+                tag: "heroTag_1",
+              ),
+              RewardItem(
+                title: "20€ Nachlass auf Stromrechnung",
+                id: "0a40",
+                imgUrl: "assets/strom.jfif",
+                kelaxCost: 2000,
+                reduceKelaxBalance: _reduceBalance,
+                tag: "heroTag_2",
+              ),
+              RewardItem(
+                title: "Gratis Emmi Caffè Latte beim Spar/Hofer",
+                id: "0a41",
+                imgUrl: "assets/kaffee.jpg",
+                kelaxCost: 100,
+                reduceKelaxBalance: _reduceBalance,
+                tag: "heroTag_3",
+              ),
             ],
-          );
+          ));
         },
       ),
     );
