@@ -5,6 +5,7 @@ import 'package:hackathon24/pages/reservation.dart';
 import 'package:hackathon24/pages/welcome.dart';
 import 'package:hackathon24/services/backend_service.dart';
 import 'package:hackathon24/services/balance_service.dart';
+import 'package:hackathon24/services/chargepoint_service.dart';
 
 extension ColorsExt on Color {
   MaterialColor toMaterialColor() {
@@ -32,6 +33,7 @@ extension ColorsExt on Color {
 void main() {
   GetIt.I.registerSingleton<BackendService>(BackendService());
   GetIt.I.registerSingleton<BalanceService>(BalanceService());
+  GetIt.I.registerSingleton<ChargePointService>(ChargePointService());
   runApp(const MyApp());
 }
 
