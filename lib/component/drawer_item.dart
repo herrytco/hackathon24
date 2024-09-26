@@ -7,11 +7,13 @@ class DrawerItem extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.isSelected,
+    required this.setIsSelected,
   });
 
   final String label;
   final IconData icon;
   final bool isSelected;
+  final VoidCallback setIsSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class DrawerItem extends StatelessWidget {
           color: kelagGreen,
         ),
         title: Text(label),
+        onTap: setIsSelected,
       ),
     );
   }

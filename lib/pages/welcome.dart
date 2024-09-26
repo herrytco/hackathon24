@@ -5,6 +5,7 @@ import 'package:hackathon24/component/welcome/balance_card.dart';
 import 'package:hackathon24/component/welcome/drawer.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/services/balance_service.dart';
+import 'package:hackathon24/pages/rewards.dart';
 
 class _WelcomeData {
   int balance;
@@ -18,8 +19,28 @@ Future<_WelcomeData> _loadData() async {
   return _WelcomeData(balance);
 }
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
+
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  int selectedDrawer = 0;
+
+  void selectDrawer(int selected, BuildContext context) {
+    setState(() {
+      selectedDrawer = selected;
+      Navigator.pop(context);
+      if (selected == 3) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const RewardsPage()),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +79,10 @@ class WelcomePage extends StatelessWidget {
           ),
         ),
       ),
-      drawer: const WelcomeDrawer(),
+      drawer: WelcomeDrawer(
+        selectedDrawer: selectedDrawer,
+        selectDrawer: (value) => selectDrawer(value, context),
+      ),
       body: FutureBuilder<_WelcomeData>(
         future: _loadData(),
         builder: (context, snapshot) {
