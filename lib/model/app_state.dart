@@ -11,6 +11,10 @@ class AppState {
   final List<ChargePoint> chargePoints;
   final List<Booking> bookings;
 
+  ChargePoint getChargePointForId(int id) {
+    return chargePoints.where((element) => element.id == id).first;
+  }
+
   double get euro {
     return balance / 102.0;
   }

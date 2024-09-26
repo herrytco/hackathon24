@@ -60,9 +60,14 @@ class _ChargePointViewState extends State<ChargePointView> {
               (selectedDurationInHours * (60 * 60 * 1000)))
           .toInt(),
     );
-    await GetIt.I
-        .get<BookingService>()
-        .startLoading(widget.chargePoint, start, end);
+    await GetIt.I.get<BookingService>().startLoading(
+          widget.chargePoint,
+          start,
+          end,
+          selectedDurationInHours,
+          expectedPower,
+          expectedPower * tariff,
+        );
 
     Navigator.of(context).pop();
   }

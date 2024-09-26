@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hackathon24/component/header.dart';
 import 'package:hackathon24/component/hello.dart';
 import 'package:hackathon24/component/reservation/charge_point_reservation.dart';
