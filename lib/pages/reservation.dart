@@ -5,9 +5,15 @@ import 'package:hackathon24/component/hello.dart';
 import 'package:hackathon24/constants/labels.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/model/app_state.dart';
+import 'package:hackathon24/model/chargepoint.dart';
 
 class ReservationPage extends StatefulWidget {
-  const ReservationPage({super.key});
+  const ReservationPage({
+    super.key,
+    required this.chargePoint,
+  });
+
+  final ChargePoint? chargePoint;
 
   @override
   State<ReservationPage> createState() => _ReservationPageState();

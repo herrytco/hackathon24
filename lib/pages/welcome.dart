@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hackathon24/component/charge_point_map.dart';
 import 'package:hackathon24/component/header.dart';
 import 'package:hackathon24/component/welcome/balance_card.dart';
 import 'package:hackathon24/component/welcome/drawer.dart';
+import 'package:hackathon24/constants/labels.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/model/app_state.dart';
+import 'package:hackathon24/model/chargepoint.dart';
 import 'package:hackathon24/pages/reservation.dart';
 import 'package:hackathon24/services/balance_service.dart';
 import 'package:hackathon24/pages/rewards.dart';
@@ -53,10 +56,12 @@ class _WelcomePageState extends State<WelcomePage> {
     setState(() {});
   }
 
-  void _onReservation() {
+  void _onReservation(ChargePoint? chargePoint) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const ReservationPage(),
+        builder: (context) => ReservationPage(
+          chargePoint: chargePoint,
+        ),
       ),
     );
   }
@@ -66,7 +71,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       appBar: KelagAppHeader.header,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _onReservation,
+        onPressed: () => _onReservation(null),
         icon: const Icon(Icons.book, color: Colors.white),
         label: const Text(
           "Jetzt Ladestation reservieren",
@@ -111,29 +116,13 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               const Gap(16),
               Expanded(
-                child: GoogleMap(
-                  mapType: MapType.normal,
-                  initialCameraPosition: const CameraPosition(
-                    zoom: 15,
-                    target: LatLng(
-                      46.6106852,
-                      13.8097518,
-                    ),
-                  ),
-                  markers: {
-                    const Marker(
-                      markerId: MarkerId("myPosition"),
-                      position: LatLng(
-                        46.6106852,
-                        13.8097518,
-                      ),
-                    ),
-                  },
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                  minMaxZoomPreference: const MinMaxZoomPreference(10, 20),
-                ),
+                child: snapshot.data != null
+                    ? ChargePointMap(
+                        state: snapshot.data!,
+                        controller: _controller,
+                        onSelect: _onReservation,
+                      )
+                    : const SizedBox(),
               ),
             ],
           );

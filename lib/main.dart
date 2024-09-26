@@ -7,6 +7,7 @@ import 'package:hackathon24/services/activated_service.dart';
 import 'package:hackathon24/services/backend_service.dart';
 import 'package:hackathon24/services/balance_service.dart';
 import 'package:hackathon24/services/chargepoint_service.dart';
+import 'package:hackathon24/services/icon_helper.dart';
 
 extension ColorsExt on Color {
   MaterialColor toMaterialColor() {
@@ -31,11 +32,18 @@ extension ColorsExt on Color {
   }
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   GetIt.I.registerSingleton<BackendService>(BackendService());
   GetIt.I.registerSingleton<BalanceService>(BalanceService());
   GetIt.I.registerSingleton<ActivatedService>(ActivatedService());
   GetIt.I.registerSingleton<ChargePointService>(ChargePointService());
+
+  var iconHelper = IconHelper();
+  await iconHelper.init();
+  GetIt.I.registerSingleton<IconHelper>(iconHelper);
+
   runApp(const MyApp());
 }
 
@@ -54,9 +62,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         "/": (_) => const WelcomePage(),
-        "/reservations": (_) => const ReservationPage(),
       },
-      initialRoute: "/reservations",
     );
   }
 }
