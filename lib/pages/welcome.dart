@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,8 +20,19 @@ Future<_WelcomeData> _loadData() async {
   return _WelcomeData(balance);
 }
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
+
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  Future<void> _onCharge() async {
+    await GetIt.I.get<BalanceService>().addBalance(Random().nextInt(1000));
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +80,21 @@ class WelcomePage extends StatelessWidget {
           return Column(
             children: [
               BalanceCard(balance: data?.balance),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: _onCharge,
+                    label: const Text("Laden"),
+                    icon: const Icon(Icons.battery_charging_full_sharp),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    label: const Text("Ladehistorie"),
+                    icon: const Icon(Icons.history),
+                  ),
+                ],
+              ),
             ],
           );
         },
