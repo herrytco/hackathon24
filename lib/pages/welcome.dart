@@ -10,6 +10,7 @@ import 'package:hackathon24/component/welcome/balance_card.dart';
 import 'package:hackathon24/component/welcome/drawer.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/services/balance_service.dart';
+import 'package:hackathon24/pages/rewards.dart';
 
 class _WelcomeData {
   int balance;
@@ -33,6 +34,21 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
+
+  int selectedDrawer = 0;
+
+  void selectDrawer(int selected, BuildContext context) {
+    setState(() {
+      selectedDrawer = selected;
+      Navigator.pop(context);
+      if (selected == 3) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const RewardsPage()),
+        );
+      }
+    });
+  }
 
   Future<void> _onCharge() async {
     await GetIt.I.get<BalanceService>().addBalance(Random().nextInt(1000));
@@ -77,7 +93,10 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ),
       ),
-      drawer: const WelcomeDrawer(),
+      drawer: WelcomeDrawer(
+        selectedDrawer: selectedDrawer,
+        selectDrawer: (value) => selectDrawer(value, context),
+      ),
       body: FutureBuilder<_WelcomeData>(
         future: _loadData(),
         builder: (context, snapshot) {
