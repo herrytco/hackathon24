@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hackathon24/constants/theme_data.dart';
-import 'package:hackathon24/pages/reservation.dart';
 import 'package:hackathon24/pages/welcome.dart';
 import 'package:hackathon24/services/activated_service.dart';
 import 'package:hackathon24/services/backend_service.dart';
@@ -55,6 +54,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'WattUp!',
       theme: ThemeData(
+        sliderTheme: SliderThemeData(
+          showValueIndicator: ShowValueIndicator.always,
+        ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: kelagGreen.toMaterialColor(),
         ),

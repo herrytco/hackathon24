@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hackathon24/component/header.dart';
 import 'package:hackathon24/component/hello.dart';
+import 'package:hackathon24/component/reservation/charge_point_reservation.dart';
 import 'package:hackathon24/constants/labels.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/model/app_state.dart';
@@ -36,7 +37,7 @@ class _ReservationPageState extends State<ReservationPage> {
               children: [
                 Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: HelloWidget(),
                     ),
                     Text(
@@ -48,14 +49,17 @@ class _ReservationPageState extends State<ReservationPage> {
                     ),
                   ],
                 ),
-                Gap(16),
+                const Gap(16),
                 Text(
-                  "Buch deine Ladesäule noch heute!",
+                  "Buche deine Ladesäule noch heute!",
                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: kelagGreen,
                       ),
                 ),
+                const Gap(16),
+                if (widget.chargePoint != null)
+                  ChargePointView(chargePoint: widget.chargePoint!),
               ],
             ),
           );
