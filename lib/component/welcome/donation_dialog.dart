@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hackathon24/constants/labels.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/model/ngo.dart';
-import 'package:hackathon24/services/backend_service.dart';
 import 'package:hackathon24/services/balance_service.dart';
 
 class DonationDialog extends StatefulWidget {
@@ -121,7 +120,7 @@ class _DonationDialogState extends State<DonationDialog> {
               backgroundColor: Colors.white,
               foregroundColor: Colors.black,
             ),
-            child: Text("Spende 100 $coinNameShort"),
+            child: const Text("Spende 100 $coinNameShort"),
           ),
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -129,7 +128,7 @@ class _DonationDialogState extends State<DonationDialog> {
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
           ),
-          child: Text("Abbrechen"),
+          child: const Text("Abbrechen"),
         ),
       ],
     );

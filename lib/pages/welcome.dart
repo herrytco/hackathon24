@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
@@ -30,6 +31,10 @@ class _WelcomePageState extends State<WelcomePage> {
 
   int selectedDrawer = 0;
   bool dailyGoalReached = false;
+
+  final _confettiController = ConfettiController(
+    duration: const Duration(seconds: 1),
+  );
 
   void selectDrawer(int selected, BuildContext context) {
     setState(() {
@@ -66,13 +71,16 @@ class _WelcomePageState extends State<WelcomePage> {
     });
   }
 
-  Future<void> _onCharge() async {
+  Future<void> _onCharge(int oldStreakValue) async {
     await GetIt.I.get<BalanceService>().addBalance(Random().nextInt(1000));
     if (!dailyGoalReached) {
       await GetIt.I.get<BalanceService>().increaseStreak();
     }
     setState(() {
       dailyGoalReached = true;
+      if (oldStreakValue + 1 == BalanceService.maxStreakValue) {
+        _confettiController.play();
+      }
     });
   }
 
@@ -111,45 +119,50 @@ class _WelcomePageState extends State<WelcomePage> {
         builder: (context, snapshot) {
           var data = snapshot.data;
 
-          return Column(
-            children: [
-              BalanceCard(
-                balance: data,
-                reload: () {
-                  setState(() {});
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: _onCharge,
-                    label: const Text("Laden"),
-                    icon: const Icon(Icons.battery_charging_full_sharp),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    label: const Text("Ladehistorie"),
-                    icon: const Icon(Icons.history),
-                  ),
-                ],
-              ),
-              const Gap(16),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32),
-                child: Divider(),
-              ),
-              const Gap(16),
-              Expanded(
-                child: snapshot.data != null
-                    ? ChargePointMap(
-                        state: snapshot.data!,
-                        controller: _controller,
-                        onSelect: _onReservation,
-                      )
-                    : const SizedBox(),
-              ),
-            ],
+          return ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            numberOfParticles: 50,
+            child: Column(
+              children: [
+                BalanceCard(
+                  balance: data,
+                  reload: () {
+                    setState(() {});
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () => _onCharge(data!.streak),
+                      label: const Text("Laden"),
+                      icon: const Icon(Icons.battery_charging_full_sharp),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {},
+                      label: const Text("Ladehistorie"),
+                      icon: const Icon(Icons.history),
+                    ),
+                  ],
+                ),
+                const Gap(16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  child: Divider(),
+                ),
+                const Gap(16),
+                Expanded(
+                  child: snapshot.data != null
+                      ? ChargePointMap(
+                          state: snapshot.data!,
+                          controller: _controller,
+                          onSelect: _onReservation,
+                        )
+                      : const SizedBox(),
+                ),
+              ],
+            ),
           );
         },
       ),
