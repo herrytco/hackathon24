@@ -72,13 +72,13 @@ const chargePointData = """
 """;
 
 class ChargePointService {
-  List<ChargePoint>? points;
+  List<ChargePoint>? _points;
 
   Future<List<ChargePoint>> loadChargePoints() async {
-    if (points == null) {
+    if (_points == null) {
       List<dynamic> json = jsonDecode(chargePointData);
 
-      var points = [];
+      List<ChargePoint> points = [];
 
       for (Map<String, dynamic> row in json) {
         points.add(ChargePoint.fromJson(row));
@@ -86,7 +86,9 @@ class ChargePointService {
 
       var url = Uri.http('94.130.230.244:32005', 'requestStation');
       print(url.toString());
+
+      _points = points;
     }
-    return points!;
+    return _points!;
   }
 }

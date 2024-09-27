@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:animated_digit/animated_digit.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
@@ -22,6 +23,9 @@ class GamblePage extends StatefulWidget {
 class _GamblePageState extends State<GamblePage> {
   int _stake = 100;
   var result = GambleResult.random();
+  final _confettiController = ConfettiController(
+    duration: const Duration(seconds: 1),
+  );
 
   void _adjustStake(int change, int balance) {
     setState(() {
@@ -34,7 +38,8 @@ class _GamblePageState extends State<GamblePage> {
     });
   }
 
-  void _onSpin(ScaffoldMessengerState scaffoldState) async {
+  void _onSpin(ScaffoldMessengerState scaffoldState,
+      {bool forcedWin = false}) async {
     setState(() {
       result.wipe();
     });
@@ -42,7 +47,7 @@ class _GamblePageState extends State<GamblePage> {
     await Future.delayed(const Duration(seconds: 1));
 
     setState(() {
-      result.roll();
+      result.roll(forcedWin: forcedWin);
     });
 
     if (result.isWin) {
@@ -50,6 +55,7 @@ class _GamblePageState extends State<GamblePage> {
       scaffoldState.showSnackBar(
         SnackBar(content: Text("Du hast $_stake $coinNameShort gewonnen!")),
       );
+      _confettiController.play();
     } else {
       await GetIt.I.get<BalanceService>().removeBalance(_stake);
       scaffoldState.showSnackBar(
@@ -58,6 +64,7 @@ class _GamblePageState extends State<GamblePage> {
           duration: Duration(milliseconds: 700),
         ),
       );
+      _confettiController.play();
     }
 
     setState(() {});
@@ -76,126 +83,135 @@ class _GamblePageState extends State<GamblePage> {
 
           if (data == null) return const SizedBox();
 
-          return Column(
-            children: [
-              const Gap(16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Punktestand: ",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: kelagGreen),
-                  ),
-                  AnimatedDigitWidget(
-                    value: data.balance,
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: kelagGreen),
-                  ),
-                  Text(
-                    " $coinNameShort",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: kelagGreen),
-                  ),
-                ],
-              ),
-              // adjust stake
-              Container(
-                height: 200,
-                padding: const EdgeInsets.all(16),
-                child: Row(
+          return ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            numberOfParticles: 50,
+            child: Column(
+              children: [
+                const Gap(16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => _adjustStake(-10, data.balance),
-                          child: const Text("-10"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => _adjustStake(-50, data.balance),
-                          child: const Text("-50"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => _adjustStake(-100, data.balance),
-                          child: const Text("-100"),
-                        ),
-                      ],
+                    Text(
+                      "Punktestand: ",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: kelagGreen),
                     ),
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "$_stake $coinNameShort",
-                            style: const TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Text("Einsatz"),
-                        ],
-                      ),
+                    AnimatedDigitWidget(
+                      value: data.balance,
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: kelagGreen),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => _adjustStake(10, data.balance),
-                          child: const Text("+10"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => _adjustStake(50, data.balance),
-                          child: const Text("+50"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => _adjustStake(100, data.balance),
-                          child: const Text("+100"),
-                        ),
-                      ],
+                    Text(
+                      " $coinNameShort",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: kelagGreen),
                     ),
                   ],
                 ),
-              ),
-
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Divider(),
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  NumberWheel(
-                    width: wheelWidth,
-                    value: result.x,
+                // adjust stake
+                Container(
+                  height: 200,
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => _adjustStake(-10, data.balance),
+                            child: const Text("-10"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _adjustStake(-50, data.balance),
+                            child: const Text("-50"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _adjustStake(-100, data.balance),
+                            child: const Text("-100"),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "$_stake $coinNameShort",
+                              style: const TextStyle(
+                                fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text("Einsatz"),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => _adjustStake(10, data.balance),
+                            child: const Text("+10"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _adjustStake(50, data.balance),
+                            child: const Text("+50"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _adjustStake(100, data.balance),
+                            child: const Text("+100"),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  NumberWheel(
-                    width: wheelWidth,
-                    value: result.y,
-                  ),
-                  NumberWheel(
-                    width: wheelWidth,
-                    value: result.z,
-                  ),
-                ],
-              ),
+                ),
 
-              const Gap(16),
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Divider(),
+                ),
 
-              ElevatedButton.icon(
-                onPressed: _stake <= data.balance
-                    ? () => _onSpin(ScaffoldMessenger.of(context))
-                    : null,
-                label: const Text("Spin to Win"),
-              ),
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    NumberWheel(
+                      width: wheelWidth,
+                      value: result.x,
+                    ),
+                    NumberWheel(
+                      width: wheelWidth,
+                      value: result.y,
+                    ),
+                    NumberWheel(
+                      width: wheelWidth,
+                      value: result.z,
+                    ),
+                  ],
+                ),
+
+                const Gap(16),
+
+                ElevatedButton.icon(
+                  onPressed: _stake <= data.balance
+                      ? () => _onSpin(ScaffoldMessenger.of(context))
+                      : null,
+                  onLongPress: _stake <= data.balance
+                      ? () => _onSpin(ScaffoldMessenger.of(context),
+                          forcedWin: true)
+                      : null,
+                  label: const Text("Spin to Win"),
+                ),
+              ],
+            ),
           );
         },
       ),
