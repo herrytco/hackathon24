@@ -13,6 +13,7 @@ import 'package:hackathon24/component/welcome/drawer.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/model/app_state.dart';
 import 'package:hackathon24/model/chargepoint.dart';
+import 'package:hackathon24/pages/gamble.dart';
 import 'package:hackathon24/pages/history.dart';
 import 'package:hackathon24/pages/reservation.dart';
 import 'package:hackathon24/services/balance_service.dart';
@@ -41,32 +42,46 @@ class _WelcomePageState extends State<WelcomePage> {
       selectedDrawer = selected;
       Navigator.pop(context);
 
-      if (selected == 1) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PopScope(
-              onPopInvokedWithResult: (didpop, dynamic) {
-                setState(() {});
-              },
-              child: const HistoryPage(),
+      switch (selected) {
+        case 1:
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PopScope(
+                onPopInvokedWithResult: (didpop, dynamic) {
+                  setState(() {});
+                },
+                child: const HistoryPage(),
+              ),
             ),
-          ),
-        );
-      }
-
-      if (selected == 3) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PopScope(
-              onPopInvokedWithResult: (didpop, dynamic) {
-                setState(() {});
-              },
-              child: const RewardsPage(),
+          );
+          break;
+        case 2:
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PopScope(
+                onPopInvokedWithResult: (didpop, dynamic) {
+                  setState(() {});
+                },
+                child: const GamblePage(),
+              ),
             ),
-          ),
-        );
+          );
+          break;
+        case 3:
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PopScope(
+                onPopInvokedWithResult: (didpop, dynamic) {
+                  setState(() {});
+                },
+                child: const RewardsPage(),
+              ),
+            ),
+          );
+          break;
       }
     });
   }

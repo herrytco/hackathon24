@@ -29,8 +29,8 @@ class WelcomeDrawer extends StatelessWidget {
             setIsSelected: () => selectDrawer(1),
           ),
           DrawerItem(
-            label: "Ladestationen",
-            icon: Icons.battery_4_bar_rounded,
+            label: "Einarmiger Bandit",
+            icon: Icons.gamepad,
             isSelected: selectedDrawer == 2,
             setIsSelected: () => selectDrawer(2),
           ),
