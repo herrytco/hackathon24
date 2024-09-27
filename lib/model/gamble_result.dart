@@ -5,7 +5,7 @@ class GambleResult {
   int? y;
   int? z;
 
-  GambleResult(this.x, this.y, this.z);
+  GambleResult([this.x, this.y, this.z]);
 
   void wipe() {
     x = null;
@@ -13,13 +13,17 @@ class GambleResult {
     z = null;
   }
 
-  factory GambleResult.random() {
+  void roll() {
     var r = Random();
 
-    return GambleResult(
-      r.nextInt(10),
-      r.nextInt(10),
-      r.nextInt(10),
-    );
+    x = r.nextInt(10);
+    y = r.nextInt(10);
+    z = r.nextInt(10);
+  }
+
+  bool get isWin => x == y && y == z;
+
+  factory GambleResult.random() {
+    return GambleResult()..roll();
   }
 }
