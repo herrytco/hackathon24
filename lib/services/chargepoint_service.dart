@@ -1,5 +1,6 @@
 import 'package:hackathon24/model/chargepoint.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 const chargePointData = """
   [
@@ -71,19 +72,21 @@ const chargePointData = """
 """;
 
 class ChargePointService {
-  List<ChargePoint>? _points;
+  List<ChargePoint>? points;
 
   Future<List<ChargePoint>> loadChargePoints() async {
-    if (_points == null) {
+    if (points == null) {
       List<dynamic> json = jsonDecode(chargePointData);
 
-      _points = [];
+      var points = [];
 
       for (Map<String, dynamic> row in json) {
-        _points!.add(ChargePoint.fromJson(row));
+        points.add(ChargePoint.fromJson(row));
       }
-    }
 
-    return _points!;
+      var url = Uri.http('94.130.230.244:32005', 'requestStation');
+      print(url.toString());
+    }
+    return points!;
   }
 }
