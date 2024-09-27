@@ -45,7 +45,12 @@ class _RewardsPageState extends State<RewardsPage> {
           return SingleChildScrollView(
               child: Column(
             children: [
-              BalanceCard(balance: data),
+              BalanceCard(
+                balance: data,
+                reload: () {
+                  setState(() {});
+                },
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(

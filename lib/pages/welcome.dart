@@ -113,7 +113,12 @@ class _WelcomePageState extends State<WelcomePage> {
 
           return Column(
             children: [
-              BalanceCard(balance: data),
+              BalanceCard(
+                balance: data,
+                reload: () {
+                  setState(() {});
+                },
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

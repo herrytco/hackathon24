@@ -2,6 +2,7 @@ import 'package:animated_digit/animated_digit.dart';
 import 'package:floating_bubbles/floating_bubbles.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hackathon24/component/welcome/donation_dialog.dart';
 import 'package:hackathon24/constants/labels.dart';
 import 'package:hackathon24/constants/theme_data.dart';
 import 'package:hackathon24/model/app_state.dart';
@@ -19,9 +20,20 @@ class BalanceCard extends StatelessWidget {
   const BalanceCard({
     super.key,
     required this.balance,
+    required this.reload,
   });
 
   final AppState? balance;
+  final void Function() reload;
+
+  void _onDonate(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => DonationDialog(
+        onComplete: reload,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +67,24 @@ class BalanceCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          "$coinName Konto",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall!
-                              .copyWith(color: Colors.white),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "$coinName Konto",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .copyWith(color: Colors.white),
+                              ),
+                            ),
+                            if (balance != null && balance!.balance >= 100)
+                              ElevatedButton.icon(
+                                onPressed: () => _onDonate(context),
+                                label: const Text("Jetzt Spenden!"),
+                                icon: const Icon(Icons.money),
+                              ),
+                          ],
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
