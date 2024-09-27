@@ -32,6 +32,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
   int selectedDrawer = 0;
   bool dailyGoalReached = false;
+  AppState? currentState;
 
   final _confettiController = ConfettiController(
     duration: const Duration(seconds: 1),
@@ -100,6 +101,9 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   void _onReservation(ChargePoint? chargePoint) {
+    if (currentState == null) return;
+    chargePoint ??= currentState!.chargePoints.first;
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ReservationPage(
@@ -133,6 +137,8 @@ class _WelcomePageState extends State<WelcomePage> {
         future: loadAppState(),
         builder: (context, snapshot) {
           var data = snapshot.data;
+
+          currentState = data;
 
           return ConfettiWidget(
             confettiController: _confettiController,
@@ -172,7 +178,8 @@ class _WelcomePageState extends State<WelcomePage> {
                       ? ChargePointMap(
                           state: snapshot.data!,
                           controller: _controller,
-                          onSelect: _onReservation,
+                          onSelect: (ChargePoint point) =>
+                              _onReservation(point),
                         )
                       : const SizedBox(),
                 ),

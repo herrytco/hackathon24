@@ -42,7 +42,6 @@ flutter:
 flutter_launcher_icons:
   image_path: "assets/kelag_icon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
-  android: "launcher_icon"
   web:
     generate: true
     image_path: "assets/kelag_icon.png"

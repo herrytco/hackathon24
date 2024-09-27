@@ -90,6 +90,16 @@ class _ChargePointViewState extends State<ChargePointView> {
             ),
           ),
           const Divider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              widget.chargePoint.name,
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge!
+                  .copyWith(color: Colors.white),
+            ),
+          ),
           Row(
             children: [
               const Gap(16),

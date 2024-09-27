@@ -64,7 +64,6 @@ class _GamblePageState extends State<GamblePage> {
           duration: Duration(milliseconds: 700),
         ),
       );
-      _confettiController.play();
     }
 
     setState(() {});
