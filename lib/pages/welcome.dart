@@ -161,7 +161,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       icon: const Icon(Icons.battery_charging_full_sharp),
                     ),
                     ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const HistoryPage()),
+                      ),
                       label: const Text("Ladehistorie"),
                       icon: const Icon(Icons.history),
                     ),

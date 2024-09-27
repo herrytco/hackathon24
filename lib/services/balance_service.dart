@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hackathon24/services/backend_service.dart';
 
 class BalanceService {
-  int _balance = 0;
+  int _balance = 1420;
   int get balance => _balance;
   int _streak = 4;
   static const int maxStreakValue = 5;
