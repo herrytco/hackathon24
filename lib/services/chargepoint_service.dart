@@ -75,7 +75,7 @@ class ChargePointService {
   List<ChargePoint>? _points;
 
   Future<List<ChargePoint>> loadChargePoints() async {
-    //var base = "http://94.130.230.244:32005/requestStation?";
+    var base = "http://94.130.230.244:32005/requestStation?";
     if (_points == null) {
       List<dynamic> json = jsonDecode(chargePointData);
 
@@ -84,13 +84,17 @@ class ChargePointService {
       for (Map<String, dynamic> row in json) {
         var chargePoint = ChargePoint.fromJson(row);
         points.add(chargePoint);
-        //base += "id=${chargePoint.id}&";
+        base += "id=${chargePoint.id}&";
       }
-      /*base += "charg=75";
+      base += "charg=75";
       var url = Uri.parse(base);
-      var response = await http.get(url);*/
+      var response = await http.get(url);
 
-      _points = points;
+      Map<String, dynamic> recommended = jsonDecode(response.body);
+
+      _points = points
+          .where((element) => recommended[element.id.toString()] == "true")
+          .toList();
     }
     return _points!;
   }
